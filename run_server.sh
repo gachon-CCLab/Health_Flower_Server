@@ -4,13 +4,6 @@
 
 echo "Starting server"
 python server.py &
-sleep 12  # Sleep for 3s to give the server enough time to start
-
-# client 수 설정
-for i in `seq 0 9`; do
-    echo "Starting client $i"
-    python /Users/yangsemo/VScode/Flower_Health/Health_Flower_Client/client.py --partition=${i} &
-done
 
 # This will allow you to use CTRL+C to stop all background processes
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
