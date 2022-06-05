@@ -41,20 +41,20 @@ val_steps = 5
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 # aws session 연결
 def aws_session(region_name='ap-northeast-2'):
-    return boto3.session.Session(aws_access_key_id=os.environ.getenv('AWS_ACCESS_KEY_ID'),
-                                aws_secret_access_key=os.environ.getenv('AWS_ACCESS_KEY_SECRET'),
+    return boto3.session.Session(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                                aws_secret_access_key=os.getenv('AWS_ACCESS_KEY_SECRET'),
                                 region_name=region_name)
 
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
-    bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
+    bucket_name = os.getenv('AWS_BUCKET_NAME')
     global today_str, latest_gl_model_v, next_gl_model
     
     session = aws_session()
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename='/app/model_V%s.h5'%latest_gl_model_v,
+        Filename='/Users/yangsemo/VScode/Flower_Health/model_V%s.h5'%latest_gl_model_v,
         Key=global_model,
     )
     
@@ -64,7 +64,7 @@ def upload_model_to_bucket(global_model):
 
 # s3에 저장되어 있는 latest global model download
 def model_download():
-    bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
+    bucket_name = os.getenv('AWS_BUCKET_NAME')
     global latest_gl_model_v, next_gl_model
     
     session = aws_session()
@@ -80,7 +80,7 @@ def model_download():
         key = content['Key']
         file_list.append(key)
     
-    model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
+    model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '../download_model/model_V%s.h5'%latest_gl_model_v)
 
 
     # if 'model_V%s.h5'%latest_gl_model_v in file_list:
@@ -139,9 +139,9 @@ def main() -> None:
     print('')
 
     
-    if os.path.isfile('/model/model_V%s.h5'%latest_gl_model_v):
+    if os.path.isfile('../download_model/model_V%s.h5'%latest_gl_model_v):
         print('load model')
-        model = tf.keras.models.load_model('/model/model_V%s.h5'%latest_gl_model_v)
+        model = tf.keras.models.load_model('../download_model/model_V%s.h5'%latest_gl_model_v)
         fl_server_start(model)
 
     else:
@@ -195,7 +195,7 @@ def get_eval_fn(model):
         global next_gl_model, res
 
         # model save
-        model.save("/model/model_V%s.h5"%next_gl_model)
+        model.save("../model_V%s.h5"%next_gl_model)
 
         # wandb에 log upload
         wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
@@ -275,9 +275,9 @@ if __name__ == "__main__":
     requests.put(inform_SE+'FLSeUpdate', data=json.dumps(inform_Payload))
     
     # wandb login and init
-    wandb.login(key=os.environ.getenv('WB_KEY'))
+    wandb.login(key=os.getenv('WB_KEY'))
     # wandb.init(entity='ccl-fl', project='health_flower', name='health_acc_loss v2')
-    wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/app',  \
+    wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/Users/yangsemo/VScode/Flower_Health/wandb_server',  \
         config={"num_rounds": num_rounds,"local_epochs": local_epochs, "batch_size": batch_size,"val_steps": val_steps, "today_datetime": today_time,
         "Model_V": next_gl_model})
 
