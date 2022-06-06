@@ -9,3 +9,4 @@ tensorflow==2.6.0
 wget==3.2
 keras==2.6.0
 wandb==0.12.11
+pyarrow
