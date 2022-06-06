@@ -277,7 +277,7 @@ if __name__ == "__main__":
     # wandb login and init
     wandb.login(key=os.environ.getenv('WB_KEY'))
     # wandb.init(entity='ccl-fl', project='health_flower', name='health_acc_loss v2')
-    wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/app',  \
+    wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/',  \
         config={"num_rounds": num_rounds,"local_epochs": local_epochs, "batch_size": batch_size,"val_steps": val_steps, "today_datetime": today_time,
         "Model_V": next_gl_model})
 
