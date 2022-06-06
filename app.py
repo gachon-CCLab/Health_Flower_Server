@@ -38,13 +38,13 @@ val_steps = 5
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 # aws session 연결
 def aws_session(region_name='ap-northeast-2'):
-    return boto3.session.Session(aws_access_key_id=os.environ.getenv('AWS_ACCESS_KEY_ID'),
-                                aws_secret_access_key=os.environ.getenv('AWS_ACCESS_KEY_SECRET'),
+    return boto3.session.Session(aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                                aws_secret_access_key=os.environ.get('AWS_ACCESS_KEY_SECRET'),
                                 region_name=region_name)
 
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
-    bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
+    bucket_name = os.environ.get('AWS_BUCKET_NAME')
     global today_str, latest_gl_model_v, next_gl_model
     
     session = aws_session()
@@ -61,7 +61,7 @@ def upload_model_to_bucket(global_model):
 
 # s3에 저장되어 있는 latest global model download
 def model_download():
-    bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
+    bucket_name = os.environ.get('AWS_BUCKET_NAME')
     global latest_gl_model_v, next_gl_model
     
     session = aws_session()
@@ -272,7 +272,7 @@ if __name__ == "__main__":
     requests.put(inform_SE+'FLSeUpdate', data=json.dumps(inform_Payload))
     
     # wandb login and init
-    wandb.login(key=os.environ.getenv('WB_KEY'))
+    wandb.login(key=os.environ.get('WB_KEY'))
     # wandb.init(entity='ccl-fl', project='health_flower', name='health_acc_loss v2')
     wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/',  \
         config={"num_rounds": num_rounds,"local_epochs": local_epochs, "batch_size": batch_size,"val_steps": val_steps, "today_datetime": today_time,
