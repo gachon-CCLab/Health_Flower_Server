@@ -19,8 +19,6 @@ import boto3
 
 import requests, json
 
-from dotenv import load_dotenv
-load_dotenv(verbose=True)
 
  # 날짜를 폴더로 설정
 # global today_str, yesterday_str
