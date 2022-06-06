@@ -48,13 +48,13 @@ def aws_session(region_name='ap-northeast-2'):
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
     bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
-    global today_str, latest_gl_model_v, next_gl_model
+    global latest_gl_model_v, next_gl_model
     
     session = aws_session()
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename='/app/model_V%s.h5'%latest_gl_model_v,
+        Filename='/model/model_V%s.h5'%next_gl_model,
         Key=global_model,
     )
     
