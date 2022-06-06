@@ -4,7 +4,6 @@ from typing import Dict,Optional, Tuple
 
 import flwr as fl
 import tensorflow as tf
-import tensorflow_addons as tfa
 
 from keras.utils.np_utils import to_categorical
 
