@@ -4,7 +4,6 @@ from typing import Dict,Optional, Tuple
 
 import flwr as fl
 import tensorflow as tf
-import tensorflow_addons as tfa
 
 from keras.utils.np_utils import to_categorical
 
@@ -251,7 +250,7 @@ if __name__ == "__main__":
     today_time = today.strftime('%Y-%m-%d %H-%M-%S')
 
     # server_status 주소
-    inform_SE: str = 'http://0.0.0.0:8000/FLSe/'
+    inform_SE: str = 'http://10.152.183.18:8000/FLSe/'
 
     # server_status 확인 => 전 global model 버전
     server_res = requests.get(inform_SE + 'info')
