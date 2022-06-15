@@ -30,8 +30,8 @@ import requests, json
 
 # FL 하이퍼파라미터 설정
 global num_rounds, epochs, batch_size, val_steps
-num_rounds = 5
-local_epochs = 3
+num_rounds = 2
+local_epochs = 2
 batch_size = 32
 val_steps = 5
 
@@ -189,10 +189,13 @@ def get_eval_fn(model):
         loss, accuracy, precision, recall, auc, auprc = model.evaluate(x_val, y_val)
         # loss, accuracy, precision, recall, f1_score, auc, auprc = model.evaluate(x_val, y_val)
 
-        global next_gl_model, res
+        global next_gl_model
 
         # model save
         model.save("model_V%s.h5"%next_gl_model)
+        
+        # s3 버킷에 global model upload
+        upload_model_to_bucket("model_V%s.h5" %next_gl_model)
 
         # wandb에 log upload
         wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
@@ -288,9 +291,6 @@ if __name__ == "__main__":
 
         # server_status에 model 버전 수정 update request
         res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
-
-        # s3 버킷에 global model upload
-        upload_model_to_bucket("model_V%s.h5" %next_gl_model)
 
          
     finally:
