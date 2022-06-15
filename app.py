@@ -51,7 +51,7 @@ def upload_model_to_bucket(global_model):
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename='/model/model_V%s.h5'%next_gl_model,
+        Filename='model_V%s.h5'%next_gl_model,
         Key=global_model,
     )
     
@@ -136,9 +136,9 @@ def main() -> None:
     print('')
 
     
-    if os.path.isfile('/model/model_V%s.h5'%latest_gl_model_v):
+    if os.path.isfile('model_V%s.h5'%latest_gl_model_v):
         print('load model')
-        model = tf.keras.models.load_model('/model/model_V%s.h5'%latest_gl_model_v)
+        model = tf.keras.models.load_model('model_V%s.h5'%latest_gl_model_v)
         fl_server_start(model)
 
     else:
@@ -192,7 +192,7 @@ def get_eval_fn(model):
         global next_gl_model, res
 
         # model save
-        model.save("/model/model_V%s.h5"%next_gl_model)
+        model.save("model_V%s.h5"%next_gl_model)
 
         # wandb에 log upload
         wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     # wandb login and init
     wandb.login(key=os.environ.getenv('WB_KEY'))
     # wandb.init(entity='ccl-fl', project='health_flower', name='health_acc_loss v2')
-    wandb.init(entity='ccl-fl', project='server_flower', name= 'server_V%s'%next_gl_model, dir='/',  \
+    wandb.init(entity='ccl-fl', project='kub_fl_server', name= 'server_V%s'%next_gl_model, dir='/',  \
         config={"num_rounds": num_rounds,"local_epochs": local_epochs, "batch_size": batch_size,"val_steps": val_steps, "today_datetime": today_time,
         "Model_V": next_gl_model})
 
