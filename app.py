@@ -44,7 +44,7 @@ def aws_session(region_name='ap-northeast-2'):
 
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
-    bucket_name = os.environ.getenv('AWS_BUCKET_NAME')
+    bucket_name = os.environ.getenv('BUCKET_NAME')
     global latest_gl_model_v, next_gl_model
     
     session = aws_session()
@@ -193,9 +193,6 @@ def get_eval_fn(model):
 
         # model save
         model.save("model_V%s.h5"%next_gl_model)
-        
-        # s3 버킷에 global model upload
-        upload_model_to_bucket("model_V%s.h5" %next_gl_model)
 
         # wandb에 log upload
         wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
@@ -291,6 +288,9 @@ if __name__ == "__main__":
 
         # server_status에 model 버전 수정 update request
         res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
+
+        # s3 버킷에 global model upload
+        upload_model_to_bucket("model_V%s.h5" %next_gl_model)
 
          
     finally:
