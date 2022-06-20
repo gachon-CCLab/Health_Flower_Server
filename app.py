@@ -44,7 +44,7 @@ def aws_session(region_name='ap-northeast-2'):
 
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
-    bucket_name = os.environ.get('AWS_BUCKET_NAME')
+    bucket_name = os.environ.get('BUCKET_NAME')
     global today_str, latest_gl_model_v, next_gl_model
     
     session = aws_session()
