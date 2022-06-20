@@ -62,7 +62,7 @@ def upload_model_to_bucket(global_model):
 # s3에 저장되어 있는 latest global model download
 def model_download():
     bucket_name = os.environ.get('BUCKET_NAME')
-    print(bucket_name: ', bucket_name)
+    print('bucket_name: ', bucket_name)
     global latest_gl_model_v, next_gl_model
     
     session = aws_session()
