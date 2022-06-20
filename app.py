@@ -77,7 +77,7 @@ def model_download():
         key = content['Key']
         file_list.append(key)
     
-    model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
+    # model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
 
 
     if 'model_V%s.h5'%latest_gl_model_v in file_list:
