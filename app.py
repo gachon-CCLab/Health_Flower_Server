@@ -30,8 +30,8 @@ import requests, json
 
 # FL 하이퍼파라미터 설정
 global num_rounds, epochs, batch_size, val_steps
-num_rounds = 5
-local_epochs = 3
+num_rounds = 2
+local_epochs = 2
 batch_size = 32
 val_steps = 5
 
