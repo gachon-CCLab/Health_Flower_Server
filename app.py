@@ -288,7 +288,7 @@ if __name__ == "__main__":
         res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
 
         # s3 버킷에 global model upload
-        upload_model_to_bucket("/model/model_V%s.h5" %next_gl_model)
+        upload_model_to_bucket("model_V%s.h5" %next_gl_model)
 
          
     finally:
