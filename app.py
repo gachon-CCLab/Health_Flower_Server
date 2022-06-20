@@ -279,7 +279,7 @@ if __name__ == "__main__":
 
     
     # s3에서 latest global model 가져오기
-    model_download()
+    # model_download()
     
     try:
         # Flower Server 실행
