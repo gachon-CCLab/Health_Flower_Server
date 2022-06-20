@@ -80,14 +80,12 @@ def model_download():
     model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
 
 
-    # if 'model_V%s.h5'%latest_gl_model_v in file_list:
-    #     model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '../download_model/model_V%s.h5'%latest_gl_model_v)
-    # else:
-    #     model = s3_resource.download_file(bucket_name,'%s_model.h5'%yesterday_str, '../download_model/%s_model.h5'%yesterday_str)
-    #     # model = s3_resource.download_file(bucket_name,'2022-05-23_model.h5', '../download_model/2022-05-23_model.h5')
+    if 'model_V%s.h5'%latest_gl_model_v in file_list:
+       model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '../download_model/model_V%s.h5'%latest_gl_model_v)
+       return model
 
-    
-    return model
+    else:
+       pass
 
 def fl_server_start(model):
 
@@ -280,7 +278,7 @@ if __name__ == "__main__":
 
     
     # s3에서 latest global model 가져오기
-    # model_download()
+    model_download()
     
     try:
         # Flower Server 실행
