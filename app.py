@@ -111,6 +111,7 @@ def fl_server_start(model):
         loss=tf.keras.losses.BinaryCrossentropy(),
         metrics=METRICS)
 
+    logging.getLogger('flower')
     # Create strategy
     strategy = fl.server.strategy.FedAvg(
         # fraction_fit > fraction_eval이여야 함
