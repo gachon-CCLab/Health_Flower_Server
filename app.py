@@ -267,8 +267,14 @@ if __name__ == "__main__":
             'Model_V' : latest_gl_model_v # GL 모델 버전
         }
 
-    # server_status => FL server ready
-    requests.put(inform_SE+'FLSeUpdate', data=json.dumps(inform_Payload))
+    while True:
+        # server_status => FL server ready
+        r = requests.put(inform_SE+'FLSeUpdate', data=json.dumps(inform_Payload))
+        if r.status_code == 200:
+            break
+        else:
+            print(r.content)
+        time.sleep(5)
     
     # wandb login and init
     wandb.login(key=os.environ.get('WB_KEY'))
@@ -285,15 +291,14 @@ if __name__ == "__main__":
         # Flower Server 실행
         main()
 
-        # server_status에 model 버전 수정 update request
-        res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
-
         # s3 버킷에 global model upload
         upload_model_to_bucket("model_V%s.h5" %next_gl_model)
-
-         
+        
     finally:
         print('server close')
+      
+        # server_status에 model 버전 수정 update request
+        res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
 
         # wandb 종료
         wandb.finish()
