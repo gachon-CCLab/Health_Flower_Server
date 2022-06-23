@@ -85,7 +85,7 @@ def model_download():
 
 
     if 'model_V%s.h5'%latest_gl_model_v in file_list:
-       model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '../download_model/model_V%s.h5'%latest_gl_model_v)
+       model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
        return model
 
     else:
@@ -289,7 +289,7 @@ if __name__ == "__main__":
 
     
     # s3에서 latest global model 가져오기
-    # model_download()
+    model_download()
     
     try:
         # Flower Server 실행
