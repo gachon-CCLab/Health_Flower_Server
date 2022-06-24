@@ -69,7 +69,7 @@ def upload_model_to_bucket(global_model):
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename='/model/model_V%s.h5'%next_gl_model,
+        Filename='/model/model_V{latest_gl_model_v}.h5',
         Key=global_model,
     )
     
@@ -100,7 +100,7 @@ def model_download():
 
 
     if 'model_V%s.h5'%latest_gl_model_v in file_list:
-       model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
+       model = s3_resource.download_file(bucket_name,f'model_V{latest_gl_model_v}.h5', f'/model/model_V{latest_gl_model_v}.h5')
        return model
 
     else:
