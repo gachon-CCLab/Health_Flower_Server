@@ -41,8 +41,8 @@ val_steps = 5
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 # aws session 연결
 def aws_session(region_name='ap-northeast-2'):
-    return boto3.session.Session(aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-                                aws_secret_access_key=os.environ.get('AWS_ACCESS_KEY_SECRET'),
+    return boto3.session.Session(aws_access_key_id=os.environ.get('ACCESS_KEY_ID'),
+                                aws_secret_access_key=os.environ.get('ACCESS_KEY_SECRET'),
                                 region_name=region_name)
 
 # s3에 global model upload
