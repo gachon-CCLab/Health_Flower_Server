@@ -41,17 +41,17 @@ local_epochs = 1
 batch_size = 32
 val_steps = 5
 
-# server 상태 확인을 위함
-class FL_Server(BaseModel):
-    FLSeReady: bool = True
+# # server 상태 확인을 위함
+# class FL_Server(BaseModel):
+#     FLSeReady: bool = True
 
-app = FastAPI()
+# app = FastAPI()
 
-FL_Se = FL_Server()
+# FL_Se = FL_Server()
 
-@app.get("/FL_ST")
-def fl_server_status():
-    return FL_Se
+# @app.get("/FL_ST")
+# def fl_server_status():
+    # return FL_Se
 
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 # aws session 연결
@@ -263,7 +263,7 @@ def evaluate_config(rnd: int):
 
 if __name__ == "__main__":
 
-    uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
+    # uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
 
     today= datetime.today()
     today_time = today.strftime('%Y-%m-%d %H-%M-%S')
