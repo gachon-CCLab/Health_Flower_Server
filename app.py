@@ -98,7 +98,7 @@ def model_download():
     
     # model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
 
-
+    print('global model name: ', f'model_V{latest_gl_model_v}.h5')
     if 'model_V%s.h5'%latest_gl_model_v in file_list:
        model = s3_resource.download_file(bucket_name,f'model_V{latest_gl_model_v}.h5', f'/model/model_V{latest_gl_model_v}.h5')
        return model
