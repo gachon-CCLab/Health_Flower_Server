@@ -303,6 +303,9 @@ if __name__ == "__main__":
       
         # server_status에 model 버전 수정 update request
         res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
+        if res.status_code == 200:
+            print('global model version upgrade')
+            print('global model version: ', res.json(['GL_Model_V']))
 
         # wandb 종료
         wandb.finish()
