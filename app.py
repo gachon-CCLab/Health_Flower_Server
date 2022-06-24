@@ -69,7 +69,7 @@ def upload_model_to_bucket(global_model):
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename='/model/model_V{latest_gl_model_v}.h5',
+        Filename=f'/model/model_V{latest_gl_model_v}.h5',
         Key=global_model,
     )
     
