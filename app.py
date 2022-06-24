@@ -42,7 +42,7 @@ val_steps = 5
 # aws session 연결
 def aws_session(region_name='ap-northeast-2'):
     return boto3.session.Session(aws_access_key_id=os.environ.get('ACCESS_KEY_ID'),
-                                aws_secret_access_key=os.environ.get('ACCESS_KEY_SECRET'),
+                                aws_secret_access_key=os.environ.get('ACCESS_SECRET_KEY'),
                                 region_name=region_name)
 
 # s3에 global model upload
