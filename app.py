@@ -69,7 +69,7 @@ def upload_model_to_bucket(global_model):
     s3_resource = session.resource('s3')
     bucket = s3_resource.Bucket(bucket_name)
     bucket.upload_file(
-        Filename=f'/model/model_V{next_gl_model}.h5',
+        Filename=f'/app/model_V{next_gl_model}.h5',
         Key=global_model,
     )
     
@@ -97,10 +97,11 @@ def model_download():
         file_list.append(key)
     
     # model = s3_resource.download_file(bucket_name,'model_V%s.h5'%latest_gl_model_v, '/model/model_V%s.h5'%latest_gl_model_v)
+    # logging.info(f's3_uploaded_model: {file_list[0]}')
 
-    print('global model name: ', f'model_V{latest_gl_model_v}.h5')
     if 'model_V%s.h5'%latest_gl_model_v in file_list:
-       model = s3_resource.download_file(bucket_name,f'model_V{latest_gl_model_v}.h5', f'/model/model_V{latest_gl_model_v}.h5')
+       model = s3_resource.download_file(bucket_name, f'model_V{latest_gl_model_v}.h5', '/app/model_V%s.h5'%latest_gl_model_v)
+       logging.info(f'model_down_path: /app/model_V{latest_gl_model_v}.h5')
        return model
 
     else:
@@ -132,9 +133,9 @@ def fl_server_start(model):
         # fraction_fit > fraction_eval이여야 함
         fraction_fit=0.3, # 클라이언트 학습 참여 비율
         fraction_eval=0.2, # 클라이언트 평가 참여 비율
-        min_fit_clients=1, # 최소 학습 참여 수
-        min_eval_clients=1, # 최소 평가 참여 수
-        min_available_clients=1, # 클라이언트 연결 필요 수
+        min_fit_clients=3, # 최소 학습 참여 수
+        min_eval_clients=3, # 최소 평가 참여 수
+        min_available_clients=3, # 클라이언트 연결 필요 수
         eval_fn=get_eval_fn(model), # 모델 평가 결과
         on_fit_config_fn=fit_config, # batchsize, epoch 수
         on_evaluate_config_fn=evaluate_config, # val_step
@@ -154,9 +155,9 @@ def main() -> None:
     print('')
 
     
-    if os.path.isfile('/model/model_V%s.h5'%latest_gl_model_v):
+    if os.path.isfile('/app/model_V%s.h5'%latest_gl_model_v):
         print('load model')
-        model = tf.keras.models.load_model('/model/model_V%s.h5'%latest_gl_model_v)
+        model = tf.keras.models.load_model('/app/model_V%s.h5'%latest_gl_model_v)
         fl_server_start(model)
 
     else:
@@ -210,7 +211,7 @@ def get_eval_fn(model):
         global next_gl_model, res
 
         # model save
-        model.save("/model/model_V%s.h5"%next_gl_model)
+        model.save("/app/model_V%s.h5"%next_gl_model)
 
         # wandb에 log upload
         wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
