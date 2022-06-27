@@ -263,7 +263,7 @@ def evaluate_config(rnd: int):
 
 if __name__ == "__main__":
 
-    # uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
 
     today= datetime.today()
     today_time = today.strftime('%Y-%m-%d %H-%M-%S')
@@ -321,7 +321,7 @@ if __name__ == "__main__":
         res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
         if res.status_code == 200:
             print('global model version upgrade')
-            print('global model version: ', res.json()['GL_Model_V'])
+            print('global model version: ', res.json()['Server_Status']['GL_Model_V'])
 
         # wandb 종료
         wandb.finish()
