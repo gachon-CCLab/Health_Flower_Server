@@ -41,17 +41,17 @@ local_epochs = 1
 batch_size = 32
 val_steps = 5
 
-# server 상태 확인을 위함
-class FL_Server(BaseModel):
-    FLSeReady: bool = True
+# # server 상태 확인을 위함
+# class FL_Server(BaseModel):
+#     FLSeReady: bool = True
 
-app = FastAPI()
+# app = FastAPI()
 
-FL_Se = FL_Server()
+# FL_Se = FL_Server()
 
-@app.get("/FL_ST")
-def fl_server_status():
-    return FL_Se
+# @app.get("/FL_ST")
+# def fl_server_status():
+#     return FL_Se
 
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 # aws session 연결
@@ -284,7 +284,7 @@ if __name__ == "__main__":
             'S3_key': 'model_V%s.h5'%latest_gl_model_v,  # 모델 가중치 파일 이름
             'play_datetime': today_time, # server 수행 시간
             'FLSeReady': True, # server 준비 상태 on
-            'Model_V' : latest_gl_model_v # GL 모델 버전
+            'GL_Model_V' : int(latest_gl_model_v) # GL 모델 버전
         }
 
     while True:
@@ -313,6 +313,12 @@ if __name__ == "__main__":
 
         # s3 버킷에 global model upload
         upload_model_to_bucket("model_V%s.h5" %next_gl_model)
+    
+    # server_status error
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        data_inform = {'FLSeReady': False}
+        r = requests.put(inform_SE+'FLSeUpdate', data=json.dumps(data_inform))
         
     finally:
         print('server close')
