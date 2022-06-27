@@ -263,7 +263,7 @@ def evaluate_config(rnd: int):
 
 if __name__ == "__main__":
 
-    uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
+    # uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
 
     today= datetime.today()
     today_time = today.strftime('%Y-%m-%d %H-%M-%S')
