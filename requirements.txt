@@ -11,3 +11,4 @@ keras==2.6.0
 wandb==0.12.11
 pyarrow
 pydantic
+tensorflow_addons

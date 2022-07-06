@@ -4,6 +4,7 @@ from typing import Dict,Optional, Tuple
 
 import flwr as fl
 import tensorflow as tf
+import tensorflow_addons as tfa
 
 import logging
 import time
@@ -118,7 +119,7 @@ def fl_server_start(model):
         tf.keras.metrics.Precision(name='precision'),
         tf.keras.metrics.Recall(name='recall'),
         tf.keras.metrics.AUC(name='auc'),
-        # tfa.metrics.F1Score(name='f1_score', num_classes=5),
+        tfa.metrics.F1Score(name='f1_score', num_classes=5, average='micro'),
         tf.keras.metrics.AUC(name='auprc', curve='PR'), # precision-recall curve
         ]
 
@@ -148,7 +149,6 @@ def fl_server_start(model):
 def main() -> None:
 
     global num_rounds, latest_gl_model_v
-    global today_str, yesterday_str
 
     print('')
     print('latest_gl_model_v', latest_gl_model_v)
@@ -168,7 +168,7 @@ def main() -> None:
             tf.keras.metrics.Precision(name='precision'),
             tf.keras.metrics.Recall(name='recall'),
             tf.keras.metrics.AUC(name='auc'),
-            # tfa.metrics.F1Score(name='f1_score', num_classes=5),
+            tfa.metrics.F1Score(name='f1_score', num_classes=5, average='micro'),
             tf.keras.metrics.AUC(name='auprc', curve='PR'), # precision-recall curve
         ]
 
@@ -205,7 +205,7 @@ def get_eval_fn(model):
     ) -> Optional[Tuple[float, Dict[str, fl.common.Scalar]]]:
         model.set_weights(weights)  # Update model with the latest parameters
         
-        loss, accuracy, precision, recall, auc, auprc = model.evaluate(x_val, y_val)
+        loss, accuracy, precision, recall, auc, f1_score = model.evaluate(x_val, y_val)
         # loss, accuracy, precision, recall, f1_score, auc, auprc = model.evaluate(x_val, y_val)
 
         global next_gl_model, res
@@ -214,11 +214,11 @@ def get_eval_fn(model):
         model.save("/app/model_V%s.h5"%next_gl_model)
 
         # wandb에 log upload
-        wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc})
+        wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc, "f1_score": f1_score})
         # wandb.log({'loss':loss,"accuracy": accuracy, "precision": precision, "recall": recall, "f1_score": f1_score,"auc": auc})
 
         
-        return loss, {"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc, "auprc": auprc}
+        return loss, {"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc, "f1_score": f1_score}
 
         # loss, accuracy, precision, recall, auc, f1_score, auprc = model.evaluate(x_val, y_val)
         # return loss, {"accuracy": accuracy, "precision": precision, "recall": recall, "auc": auc, "f1_score": f1_score, "auprc": auprc}
